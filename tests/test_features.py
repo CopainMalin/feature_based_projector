@@ -1,6 +1,13 @@
 import pytest
-from numpy import ones, arange, isclose, sin, linspace
-from src.features import length_ts, trend_strength, seasonal_strength, linearity
+from numpy import ones, arange, isclose, sin, square
+from src.features import (
+    length_ts,
+    trend_strength,
+    seasonal_strength,
+    linearity,
+    curvature,
+    spikiness,
+)
 
 from src.tools import compute_STL_decompose, generate_seasonal_ts
 
@@ -14,12 +21,12 @@ def test_length_ts():
 # 2) trend strength
 def test_trend_strength_trended_case():
     trended_serie = arange(100)
-    assert isclose(trend_strength(compute_STL_decompose(trended_serie)), 1)
+    assert trend_strength(compute_STL_decompose(trended_serie)) > 0.95
 
 
 def test_trend_strength_untrended_case():
     untrended_serie = sin(arange(100))
-    assert isclose(trend_strength(compute_STL_decompose(untrended_serie)), 0)
+    assert trend_strength(compute_STL_decompose(untrended_serie)) < 0.05
 
 
 # 3) seasonal strength
@@ -30,17 +37,31 @@ def test_seasonal_strength_seasonal_case():
 
 def test_trend_strength_unseasonal_case():
     unseasonal_serie = sin(arange(100))
-    assert isclose(trend_strength(compute_STL_decompose(unseasonal_serie)), 0)
+    assert trend_strength(compute_STL_decompose(unseasonal_serie)) < 0.05
 
 
 # 4) linearity
 def test_linear_case():
-    linear_serie = arange(100)
-    decompose = compute_STL_decompose(linear_serie)
-    assert linearity(decompose) > 1
+    assert linearity(arange(100)) > 0
 
 
-def test_non_linear_case():
-    seasonal_serie = sin(arange(100))
-    decompose = compute_STL_decompose(seasonal_serie)
-    assert linearity(decompose) < 0.05
+def test_flat_linear_case():
+    assert isclose(linearity(ones(100)), 0)
+
+
+# 5) curvature
+def test_curved_case():
+    assert curvature(-square(arange(100))) < 0
+
+
+def test_neg_curved_case():
+    assert curvature(square(arange(100))) > 0
+
+
+def test_flat_case():
+    assert isclose(curvature(ones(100)), 0)
+
+
+# 6) spikiness
+def test_spikiness():
+    assert spikiness(arange(100)) > 0

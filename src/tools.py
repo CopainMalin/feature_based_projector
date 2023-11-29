@@ -1,9 +1,12 @@
 # File with all the subtransformations neeeded to compute the features
 from statsmodels.tsa.seasonal import STL
-from typing import Iterable
 from statsmodels.tsa.seasonal import DecomposeResult
+from typing import Iterable, Tuple
+from scipy.optimize import curve_fit
+
 from pandas import Series
 from numpy import (
+    arange,
     pi,
     random,
     zeros_like,
@@ -17,10 +20,22 @@ from numpy import (
 )
 
 
-# Helper functions
-def compute_STL_decompose(arr: Iterable, period: int = 7) -> DecomposeResult:
+### Helper functions ###
+# STL decomposition
+def compute_STL_decompose(arr: Iterable, period: int = 21) -> DecomposeResult:
     stl = STL(arr, period=period)
     return stl.fit()
+
+
+# Fitting an orthogonal quadratic regression to the time serie
+def quadratic_regression(t, b0, b1, b2):
+    return b0 + b1 * t + b2 * t**2
+
+
+def fit_orthogonal_regression(arr: Iterable) -> Tuple[float, float]:
+    params, _ = curve_fit(quadratic_regression, arange(len(arr)), arr)
+
+    return (params[1], params[2])
 
 
 # generating seasonal time serie
