@@ -22,3 +22,7 @@ def seasonal_strength(decompose: DecomposeResult) -> float:
     return max(
         0.0, 1.0 - var(decompose.resid) / (var(decompose.seasonal + decompose.resid))
     )
+
+
+def linearity(decompose: DecomposeResult) -> float:
+    return var(decompose.trend) / var(decompose.seasonal)

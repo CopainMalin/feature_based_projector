@@ -1,6 +1,6 @@
 import pytest
 from numpy import ones, arange, isclose, sin, linspace
-from src.features import length_ts, trend_strength, seasonal_strength
+from src.features import length_ts, trend_strength, seasonal_strength, linearity
 
 from src.tools import compute_STL_decompose, generate_seasonal_ts
 
@@ -31,3 +31,16 @@ def test_seasonal_strength_seasonal_case():
 def test_trend_strength_unseasonal_case():
     unseasonal_serie = sin(arange(100))
     assert isclose(trend_strength(compute_STL_decompose(unseasonal_serie)), 0)
+
+
+# 4) linearity
+def test_linear_case():
+    linear_serie = arange(100)
+    decompose = compute_STL_decompose(linear_serie)
+    assert linearity(decompose) > 1
+
+
+def test_non_linear_case():
+    seasonal_serie = sin(arange(100))
+    decompose = compute_STL_decompose(seasonal_serie)
+    assert linearity(decompose) < 0.05
