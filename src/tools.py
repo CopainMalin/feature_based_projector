@@ -1,6 +1,7 @@
 # File with all the subtransformations neeeded to compute the features
 from statsmodels.tsa.seasonal import STL
 from statsmodels.tsa.seasonal import DecomposeResult
+from statsmodels.tsa.stattools import acf
 from typing import Iterable, Tuple
 from scipy.optimize import curve_fit
 
@@ -36,6 +37,11 @@ def fit_orthogonal_regression(arr: Iterable) -> Tuple[float, float]:
     params, _ = curve_fit(quadratic_regression, arange(len(arr)), arr)
 
     return (params[1], params[2])
+
+
+# Computing acf
+def compute_acf(arr: Iterable) -> list:
+    return acf(arr, nlags=10)
 
 
 # generating seasonal time serie

@@ -7,6 +7,8 @@ from src.features import (
     linearity,
     curvature,
     spikiness,
+    e_acf1,
+    e_acf10,
 )
 
 from src.tools import compute_STL_decompose, generate_seasonal_ts
@@ -64,4 +66,14 @@ def test_flat_case():
 
 # 6) spikiness
 def test_spikiness():
-    assert spikiness(arange(100)) > 0
+    assert spikiness(compute_STL_decompose(arange(100))) > 0
+
+
+# 7) e_acf1
+def test_e_acf1():
+    assert e_acf1(compute_STL_decompose(square(arange(100)))) > 0.5
+
+
+# 8) e_acf10
+def test_e_acf10():
+    assert e_acf10(compute_STL_decompose(ones(100))) < 0.1

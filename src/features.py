@@ -2,7 +2,7 @@ from typing import Iterable
 from numpy import var, delete
 from statsmodels.tsa.seasonal import DecomposeResult
 
-from src.tools import fit_orthogonal_regression
+from src.tools import fit_orthogonal_regression, compute_acf
 
 # Based on this paper
 # https://robjhyndman.com/papers/fforma.pdf
@@ -48,3 +48,13 @@ def spikiness(decomposition: DecomposeResult) -> float:
             for i in range(len(decomposition.observed))
         ]
     )
+
+
+# 7) e_acf1
+def e_acf1(decomposition: DecomposeResult) -> float:
+    return compute_acf(decomposition.resid)[1]
+
+
+# 8) e_acf10
+def e_acf10(decomposition: DecomposeResult) -> float:
+    return compute_acf(decomposition.resid)[10]
