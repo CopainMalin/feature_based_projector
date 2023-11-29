@@ -9,6 +9,8 @@ from src.features import (
     spikiness,
     e_acf1,
     e_acf10,
+    stability,
+    lumpiness,
 )
 
 from src.tools import compute_STL_decompose, generate_seasonal_ts
@@ -77,3 +79,21 @@ def test_e_acf1():
 # 8) e_acf10
 def test_e_acf10():
     assert e_acf10(compute_STL_decompose(ones(100))) < 0.1
+
+
+# 9) stability
+def test_stability_flat_case():
+    assert isclose(stability(ones(100)), 0)
+
+
+def test_stability_non_flat_case():
+    assert stability(square(arange(100))) > 0
+
+
+# 10) lumpiness
+def test_lumpiness_flat_case():
+    assert isclose(lumpiness(ones(100)), 0)
+
+
+def test_lumpiness_non_flat_case():
+    assert stability(square(arange(100))) > 0

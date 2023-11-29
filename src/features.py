@@ -2,7 +2,7 @@ from typing import Iterable
 from numpy import var, delete
 from statsmodels.tsa.seasonal import DecomposeResult
 
-from src.tools import fit_orthogonal_regression, compute_acf
+from src.tools import fit_orthogonal_regression, compute_acf, tiled_windows_computations
 
 # Based on this paper
 # https://robjhyndman.com/papers/fforma.pdf
@@ -58,3 +58,13 @@ def e_acf1(decomposition: DecomposeResult) -> float:
 # 8) e_acf10
 def e_acf10(decomposition: DecomposeResult) -> float:
     return compute_acf(decomposition.resid)[10]
+
+
+# 9) stability
+def stability(arr: Iterable) -> float:
+    return tiled_windows_computations(arr)[0]
+
+
+# 10) lumpiness
+def lumpiness(arr: Iterable) -> float:
+    return tiled_windows_computations(arr)[1]

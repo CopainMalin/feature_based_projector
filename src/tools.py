@@ -18,6 +18,9 @@ from numpy import (
     cos,
     sin,
     sum as nsum,
+    array_split,
+    mean,
+    var,
 )
 
 
@@ -42,6 +45,20 @@ def fit_orthogonal_regression(arr: Iterable) -> Tuple[float, float]:
 # Computing acf
 def compute_acf(arr: Iterable) -> list:
     return acf(arr, nlags=10)
+
+
+# Tiled-window computation to compute lumpiness and stability
+def tiled_windows_computations(
+    arr: Iterable, window_size: int = 21
+) -> Tuple[float, float]:
+    num_windows = len(arr) // window_size
+
+    windows = array_split(arr, num_windows)
+
+    means = mean(windows, axis=1)
+    variances = var(windows, axis=1)
+
+    return (var(means), var(variances))
 
 
 # generating seasonal time serie
