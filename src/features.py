@@ -1,11 +1,16 @@
 from typing import Iterable
-from numpy import var, delete
+from numpy import var, delete, sum as nsum, abs as nabs
+from scipy.fftpack import fft
+from scipy.stats import entropy as shannon_entropy
+
 from statsmodels.tsa.seasonal import DecomposeResult
 
 from src.tools import fit_orthogonal_regression, compute_acf, tiled_windows_computations
 
 # Based on this paper
 # https://robjhyndman.com/papers/fforma.pdf
+# And the description of the features given here :
+# https://pkg.robjhyndman.com/tsfeatures/articles/tsfeatures.html#lumpiness_stability
 
 
 # 1) T
@@ -41,7 +46,6 @@ def curvature(arr: Iterable) -> float:
 
 # 6) spikiness
 def spikiness(decomposition: DecomposeResult) -> float:
-    # https://pkg.robjhyndman.com/tsfeatures/articles/tsfeatures.html
     return var(
         [
             var(delete(decomposition.resid, i))
@@ -68,3 +72,14 @@ def stability(arr: Iterable) -> float:
 # 10) lumpiness
 def lumpiness(arr: Iterable) -> float:
     return tiled_windows_computations(arr)[1]
+
+
+# 11) entropy
+def entropy(arr: Iterable) -> float:
+    # fft to get spectral density
+    spectral_density = nabs(fft(arr)) ** 2
+
+    # making density a pdf
+    spectral_density /= nsum(spectral_density)
+
+    return shannon_entropy(spectral_density, base=2)

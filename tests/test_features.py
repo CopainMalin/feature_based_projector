@@ -1,5 +1,6 @@
 import pytest
-from numpy import ones, arange, isclose, sin, square
+from numpy import ones, arange, isclose, sin, square, cumsum
+from numpy.random import randn
 from src.features import (
     length_ts,
     trend_strength,
@@ -11,6 +12,7 @@ from src.features import (
     e_acf10,
     stability,
     lumpiness,
+    entropy,
 )
 
 from src.tools import compute_STL_decompose, generate_seasonal_ts
@@ -97,3 +99,12 @@ def test_lumpiness_flat_case():
 
 def test_lumpiness_non_flat_case():
     assert stability(square(arange(100))) > 0
+
+
+# 11) entropy
+def test_entropy_flat_case():
+    assert isclose(entropy(ones(100)), 0)
+
+
+def test_entropy_rw_case():
+    assert entropy(cumsum(randn(100))) > 0.05
