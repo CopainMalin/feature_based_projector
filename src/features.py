@@ -2,9 +2,9 @@ from typing import Iterable
 from numpy import var, delete, sum as nsum, abs as nabs
 from scipy.fftpack import fft
 from scipy.stats import entropy as shannon_entropy
-
 from statsmodels.tsa.seasonal import DecomposeResult
 
+from hurst import compute_Hc
 from src.tools import fit_orthogonal_regression, compute_acf, tiled_windows_computations
 
 # Based on this paper
@@ -76,10 +76,12 @@ def lumpiness(arr: Iterable) -> float:
 
 # 11) entropy
 def entropy(arr: Iterable) -> float:
-    # fft to get spectral density
     spectral_density = nabs(fft(arr)) ** 2
-
-    # making density a pdf
     spectral_density /= nsum(spectral_density)
-
     return shannon_entropy(spectral_density, base=2)
+
+
+# 12) hurst
+def hurst(arr: Iterable) -> float:
+    h, _, _ = compute_Hc(arr)
+    return h

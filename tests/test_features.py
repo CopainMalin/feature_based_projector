@@ -1,5 +1,5 @@
 import pytest
-from numpy import ones, arange, isclose, sin, square, cumsum
+from numpy import ones, arange, isclose, sin, square, cumsum, sum as nsum
 from numpy.random import randn
 from src.features import (
     length_ts,
@@ -13,8 +13,10 @@ from src.features import (
     stability,
     lumpiness,
     entropy,
+    hurst,
 )
 
+from hurst import random_walk
 from src.tools import compute_STL_decompose, generate_seasonal_ts
 
 
@@ -108,3 +110,11 @@ def test_entropy_flat_case():
 
 def test_entropy_rw_case():
     assert entropy(cumsum(randn(100))) > 0.05
+
+
+# 12) hurst
+def test_hurst_exponent_brownian_case():
+    # rwalk should give an hurst exponent close to 0.5 in most cases
+    # multiple iterations due to the low number of data points available to compute
+    # the hurst exponent
+    nsum([0.4 > hurst(random_walk(999, cumprod=True)) > 0.6 for _ in range(10)]) > 5
