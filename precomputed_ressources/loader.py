@@ -31,3 +31,9 @@ def load_kde_h1_seed_0() -> list:
     with open("precomputed_ressources/kde_h1_seed_0.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource
+
+
+def load_welch_freq_and_psd() -> list:
+    with open("precomputed_ressources/welch_freq_and_psd.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
