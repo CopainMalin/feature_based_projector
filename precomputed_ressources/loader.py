@@ -25,3 +25,9 @@ def load_transformed_h1() -> DataFrame:
     with open("precomputed_ressources/transformed_h1.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource
+
+
+def load_kde_h1_seed_0() -> list:
+    with open("precomputed_ressources/kde_h1_seed_0.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
