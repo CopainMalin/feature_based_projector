@@ -19,3 +19,9 @@ def load_hourly_m4_dataset() -> DataFrame:
     with open("precomputed_ressources/hm4_dataset.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource
+
+
+def load_transformed_h1() -> DataFrame:
+    with open("precomputed_ressources/transformed_h1.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
