@@ -1,5 +1,6 @@
 import pickle
 from pandas import DataFrame
+from numpy import ndarray
 
 
 def load_features_list() -> list:
@@ -34,5 +35,11 @@ def load_kde_h1_seed_0() -> list:
 
 def load_welch_freq_and_psd() -> list:
     with open("precomputed_ressources/welch_freq_and_psd.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
+
+
+def load_wavelet_transform() -> ndarray:
+    with open("precomputed_ressources/wavelet_transform.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource

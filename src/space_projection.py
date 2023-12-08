@@ -1,8 +1,11 @@
 from sklearn.neighbors import KernelDensity
 from pandas import DataFrame
-from numpy import linspace, exp, ndarray, diff
+from numpy import linspace, exp, ndarray, diff, arange
 from typing import Tuple
 from scipy.signal import welch
+from scipy.signal import cwt, ricker
+
+from src.utils import compute_differenciated_serie
 
 
 def compute_gaussian_kde(serie: DataFrame) -> Tuple[ndarray, ndarray]:
@@ -14,7 +17,15 @@ def compute_gaussian_kde(serie: DataFrame) -> Tuple[ndarray, ndarray]:
     return x_points, densities
 
 
-def compute_freq_and_psd(serie: DataFrame, frequency: int) -> Tuple[ndarray, ndarray]:
-    data = serie.iloc[:, -1].values
-    time_series = diff(data)
+def compute_freq_and_psd(
+    serie: DataFrame, frequency: int = 24
+) -> Tuple[ndarray, ndarray]:
+    time_series = compute_differenciated_serie(serie)
     return welch(time_series, fs=1, nperseg=3 * frequency)
+
+
+def compute_wavelets(serie: DataFrame, frequency: int = 24) -> ndarray:
+    time_series = compute_differenciated_serie(serie)
+    widths = arange(1, frequency + 10)
+    wavelet = ricker
+    return cwt(time_series, wavelet, widths)
