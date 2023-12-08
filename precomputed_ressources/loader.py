@@ -1,6 +1,5 @@
 import pickle
 from pandas import DataFrame
-from os import getcwd
 
 
 def load_features_list() -> list:
