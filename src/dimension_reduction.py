@@ -1,13 +1,11 @@
 from abc import ABC, abstractmethod
-from sklearn.base import BaseEstimator
-from sklearn.decomposition import PCA
-from umap import UMAP
-from sklearn.manifold import TSNE
 from numpy.typing import ArrayLike
 from numpy import number
-from abc import ABC, abstractmethod
-
-# Data class comprenant toutes les représentations
+from sklearn.base import BaseEstimator
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import StandardScaler
+from umap import UMAP
 
 
 class Reductor(BaseEstimator, ABC):
@@ -17,6 +15,9 @@ class Reductor(BaseEstimator, ABC):
     @abstractmethod
     def fit_transform(self, X: ArrayLike) -> ArrayLike:
         ...
+
+    def standard_scale(self, X: ArrayLike) -> ArrayLike:
+        return StandardScaler().fit_transform(X)
 
     def test_numeric(self, X: ArrayLike) -> bool:
         if X.dtype != number:
@@ -32,7 +33,9 @@ class PCAReductor(Reductor):
 
     def fit_transform(self, X: ArrayLike) -> "PCAReductor":
         super().test_numeric(X)
-        self.reducted_dataset_ = PCA(n_components=3).fit_transform(X)
+        self.reducted_dataset_ = PCA(n_components=3).fit_transform(
+            self.standard_scale(X)
+        )
         return self.reducted_dataset_
 
 
@@ -48,7 +51,7 @@ class TSNEReductor(Reductor):
         super().test_numeric(X)
         self.reducted_dataset_ = TSNE(
             n_components=3, perplexity=self.perplexity
-        ).fit_transform(X)
+        ).fit_transform(self.standard_scale(X))
         return self.reducted_dataset_
 
 
@@ -65,5 +68,5 @@ class UMAPReductor(Reductor):
         super().test_numeric(X)
         self.reducted_dataset_ = UMAP(
             n_components=3, n_neighbors=self.n_neighbors, random_state=self.random_state
-        ).fit_transform(X)
+        ).fit_transform(self.standard_scale(X))
         return self.reducted_dataset_
