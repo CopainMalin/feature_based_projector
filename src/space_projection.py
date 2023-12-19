@@ -1,11 +1,14 @@
 from sklearn.neighbors import KernelDensity
 from pandas import DataFrame
 from numpy import linspace, exp, ndarray, diff, arange
+from numpy.fft import fftfreq
 from typing import Tuple
-from scipy.signal import welch
-from scipy.signal import cwt, ricker
+from scipy.fft import fft
+from scipy.signal import welch, cwt, ricker
 
 from src.utils import compute_differenciated_serie
+
+import streamlit as st
 
 
 def compute_gaussian_kde(serie: DataFrame) -> Tuple[ndarray, ndarray]:
@@ -24,8 +27,14 @@ def compute_freq_and_psd(
     return welch(time_series, fs=1, nperseg=3 * frequency)
 
 
+def compute_fft(dataset: DataFrame) -> Tuple[ndarray, ndarray]:
+    fft_result = fft(dataset.values.ravel())
+    frequencies = fftfreq(len(fft_result))
+    return (frequencies, fft_result)
+
+
 def compute_wavelets(serie: DataFrame, frequency: int = 24) -> ndarray:
     time_series = compute_differenciated_serie(serie)
     widths = arange(1, frequency + 10)
     wavelet = ricker
-    return cwt(time_series, wavelet, widths)
+    return widths, wavelet, cwt(time_series, wavelet, widths)

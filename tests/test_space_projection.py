@@ -7,11 +7,13 @@ from precomputed_ressources.loader import (
     load_hourly_m4_dataset,
     load_welch_freq_and_psd,
     load_wavelet_transform,
+    load_fft,
 )
 from src.space_projection import (
     compute_gaussian_kde,
     compute_freq_and_psd,
     compute_wavelets,
+    compute_fft,
 )
 from src.utils import transform_nixtla_format
 
@@ -25,8 +27,6 @@ def test_gaussian_kde_computation(dataset: DataFrame):
     seed(0)
     _, densities = compute_gaussian_kde(transform_nixtla_format(dataset, "H1"))
     precomputed_densities = load_kde_h1_seed_0()
-    print(densities)
-    print(precomputed_densities)
     assert (densities == precomputed_densities).all()
 
 
@@ -42,8 +42,16 @@ def test_psd_computation(dataset: DataFrame):
 
 def test_wavelets_computation(dataset: DataFrame):
     seed(0)
-    continuous_wavelet_transform = compute_wavelets(
+    _, _, continuous_wavelet_transform = compute_wavelets(
         transform_nixtla_format(dataset, "H1"), 24
     )
     precomputed_cwt = load_wavelet_transform()
     assert (continuous_wavelet_transform == precomputed_cwt).all()
+
+
+# def test_fft_computation(dataset: DataFrame):
+#     stochastic result
+#     freq, fft = compute_fft(transform_nixtla_format(dataset, "H1").loc[:, "H1"])
+#     precomputed_freq, precomputed_fft = load_fft()
+#     assert (freq == precomputed_freq).all()
+#     assert (fft == precomputed_fft).all()

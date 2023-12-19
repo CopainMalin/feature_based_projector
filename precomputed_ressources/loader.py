@@ -43,3 +43,9 @@ def load_wavelet_transform() -> ndarray:
     with open("precomputed_ressources/wavelet_transform.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource
+
+
+def load_fft() -> list:
+    with open("precomputed_ressources/fft_and_freq.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
