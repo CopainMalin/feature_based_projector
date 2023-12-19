@@ -3,6 +3,8 @@ from numpy.random import seed
 from pandas import DataFrame
 
 from precomputed_ressources.loader import (
+    load_hourly_m4_dataset,
+    load_features_list,
     load_kde_h1_seed_0,
     load_hourly_m4_dataset,
     load_welch_freq_and_psd,
@@ -14,6 +16,7 @@ from src.space_projection import (
     compute_freq_and_psd,
     compute_wavelets,
     compute_fft,
+    compute_tsfeatures,
 )
 from src.utils import transform_nixtla_format
 
@@ -47,6 +50,18 @@ def test_wavelets_computation(dataset: DataFrame):
     )
     precomputed_cwt = load_wavelet_transform()
     assert (continuous_wavelet_transform == precomputed_cwt).all()
+
+
+class TestFeaturesComputation:
+    @pytest.fixture
+    def features(self) -> DataFrame:
+        return compute_tsfeatures(load_hourly_m4_dataset(), freq=24, fill_value=0)
+
+    def test_no_nan(self, features: DataFrame):
+        assert features.isna().sum().sum() == 0
+
+    def test_all_features_are_computed(self, features: DataFrame):
+        assert set(load_features_list()).issubset(features.columns)
 
 
 # def test_fft_computation(dataset: DataFrame):

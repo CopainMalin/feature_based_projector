@@ -2,13 +2,12 @@ from sklearn.neighbors import KernelDensity
 from pandas import DataFrame
 from numpy import linspace, exp, ndarray, diff, arange
 from numpy.fft import fftfreq
-from typing import Tuple
 from scipy.fft import fft
 from scipy.signal import welch, cwt, ricker
+from tsfeatures import tsfeatures
+from typing import Tuple
 
 from src.utils import compute_differenciated_serie
-
-import streamlit as st
 
 
 def compute_gaussian_kde(serie: DataFrame) -> Tuple[ndarray, ndarray]:
@@ -38,3 +37,8 @@ def compute_wavelets(serie: DataFrame, frequency: int = 24) -> ndarray:
     widths = arange(1, frequency + 10)
     wavelet = ricker
     return widths, wavelet, cwt(time_series, wavelet, widths)
+
+
+def compute_tsfeatures(df: DataFrame, freq: int = None, fill_value: int = 0):
+    features = tsfeatures(df, freq=freq)
+    return features.fillna(value=fill_value)
