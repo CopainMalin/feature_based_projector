@@ -51,7 +51,7 @@ def print_ts_features(features: DataFrame, serie_name: str) -> None:
     values.index = [serie_name]
 
     for iteration in range(0, values.shape[1], 6):
-        dataframe(values.iloc[:, iteration : iteration + 7], width=1000)
+        dataframe(values.iloc[:, iteration : iteration + 6], width=1000)
 
 
 def encoder(x: str, selected_datasets: list) -> str:
