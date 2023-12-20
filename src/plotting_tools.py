@@ -158,7 +158,7 @@ def plot_correlation_heatmap(top_five: dict) -> Figure:
             hovertemplate="Kendall's τ: %{customdata:.2f}<extra></extra>",
             text=[*[x.index for x in top_five.values()]][::-1],
             texttemplate="%{text}",
-            textfont={"size": 15},
+            textfont={"size": 12},
             y=list(top_five.keys())[::-1],
             colorbar={"title": "Kendall's τ range"},
             colorscale="viridis",
