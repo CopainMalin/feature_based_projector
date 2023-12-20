@@ -1,5 +1,6 @@
-from plotly.graph_objects import Figure, Scatter, Surface
+from plotly.graph_objects import Figure, Scatter, Surface, Heatmap
 from plotly.figure_factory import create_distplot
+from plotly.express import scatter_3d, colors
 from pandas import DataFrame
 from numpy import abs as nabs, ndarray, arange, meshgrid, log
 
@@ -119,4 +120,57 @@ def plot_psd_view(frequencies: ndarray, psd: ndarray, serie_name: str) -> Figure
         showlegend=True,
         legend=dict(x=1.0, y=1.0),
     )
+    return fig
+
+
+def plot_reducted_dim(reducted_df: DataFrame, reduc_dim_algo: str) -> Figure:
+    fig = scatter_3d(
+        data_frame=reducted_df,
+        x="fst_dim",
+        y="snd_dim",
+        z="trd_dim",
+        hover_name="Name",
+        color="Style",
+        symbol="Style",
+        opacity=0.8,
+        height=800,
+        hover_data={
+            "fst_dim": ":.2f",
+            "snd_dim": ":.2f",
+            "trd_dim": ":.2f",
+            "Style": False,
+        },
+        color_discrete_sequence=colors.qualitative.Plotly,
+        title=f"{reduc_dim_algo} representation",
+    )
+
+    fig.update_traces(marker_size=8)
+    fig.update_layout(showlegend=True)
+
+    return fig
+
+
+def plot_correlation_heatmap(top_five: dict) -> Figure:
+    fig = Figure(
+        data=Heatmap(
+            z=[*[x for x in top_five.values()]][::-1],
+            customdata=[*[x.values for x in top_five.values()]][::-1],
+            hovertemplate="Kendall's τ: %{customdata:.2f}<extra></extra>",
+            text=[*[x.index for x in top_five.values()]][::-1],
+            texttemplate="%{text}",
+            textfont={"size": 15},
+            y=list(top_five.keys())[::-1],
+            colorbar={"title": "Kendall's τ range"},
+            colorscale="viridis",
+            x=[f"Top {i}" for i in range(1, 6)],
+        ),
+    )
+
+    # Add title to the figure
+    fig.update_layout(
+        title_text="Top 5 Correlated Features for Each Dimension (Kendall's τ)",
+        title_font_size=20,
+        height=500,
+    )
+
     return fig

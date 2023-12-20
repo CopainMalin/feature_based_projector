@@ -49,3 +49,9 @@ def load_fft() -> list:
     with open("precomputed_ressources/fft_and_freq.pickle", "rb") as handle:
         ressource = pickle.load(handle)
     return ressource
+
+
+def load_modified_features() -> list:
+    with open("precomputed_ressources/features_m4_modified.pickle", "rb") as handle:
+        ressource = pickle.load(handle)
+    return ressource
