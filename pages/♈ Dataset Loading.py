@@ -9,6 +9,7 @@ from streamlit import (
     button,
     spinner,
     success,
+    set_page_config,
 )
 from pandas import DataFrame, date_range
 from numpy import arange
@@ -16,6 +17,7 @@ from numpy.random import randn
 from src.space_projection import compute_tsfeatures
 from src.utils import load_data, transform_dataset, inject_toy_series
 
+set_page_config(page_title="Dataset Loading")
 title(":green[Dataset management] page 💾")
 
 tuto = toggle("Show guide")
@@ -63,7 +65,7 @@ dataset = load_data()
 if dataset is not None:
     c_left, _, c_right = columns([0.35, 0.1, 0.55])
     with c_left:
-        period = number_input(label="Enter the seasonal period :", min_value=0)
+        period = number_input(label="Enter the seasonal period :", min_value=1)
         transform = button("Transform and compute")
         if transform:
             dataset = transform_dataset(dataset)

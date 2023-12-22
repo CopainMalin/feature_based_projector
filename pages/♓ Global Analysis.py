@@ -5,6 +5,7 @@ from streamlit import (
     multiselect,
     title,
     session_state,
+    set_page_config,
 )
 
 from src.utils import (
@@ -16,6 +17,9 @@ from src.utils import (
 from src.plotting_tools import plot_reducted_dim, plot_correlation_heatmap
 from src.dimension_reduction import PCAReductor, UMAPReductor, TSNEReductor
 
+
+set_page_config(page_title="Global analysis")
+
 if "data_loaded" in session_state:
     # Data loading - to be removed
     features = session_state["features"]
@@ -26,7 +30,9 @@ if "data_loaded" in session_state:
     c1, c2 = columns([0.3, 0.7])
     with c1:
         reduc_dim_algo = selectbox(
-            label="Dimension reduction algorithm :", options=["PCA", "T-SNE", "UMAP"]
+            label="Dimension reduction algorithm :",
+            options=["PCA", "T-SNE", "UMAP"],
+            index=0,
         )
     with c2:
         selected_datasets = multiselect(label="Dataset(s) to focus on:", options=names)

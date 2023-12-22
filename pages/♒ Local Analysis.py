@@ -6,8 +6,8 @@ from streamlit import (
     write,
     title,
     session_state,
+    set_page_config,
 )
-
 from src.space_projection import compute_fft, compute_wavelets, compute_freq_and_psd
 from src.utils import transform_nixtla_format, advanced_describe, print_ts_features
 from src.plotting_tools import (
@@ -18,6 +18,9 @@ from src.plotting_tools import (
     plot_psd_view,
 )
 from pandas import DataFrame
+
+
+set_page_config(page_title="Local Analysis")
 
 if "data_loaded" in session_state:
     dataset = session_state["dataset"]
