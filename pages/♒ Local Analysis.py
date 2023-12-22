@@ -34,6 +34,7 @@ if "data_loaded" in session_state:
         serie_name = selectbox(
             label="Choose the serie to plot:",
             options=dataset.unique_id.sort_values().unique(),
+            index=1,
         )
     with c2:
         plot_name = selectbox(

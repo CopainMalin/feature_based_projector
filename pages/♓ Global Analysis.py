@@ -42,7 +42,9 @@ if "data_loaded" in session_state:
     if reduc_dim_algo == "PCA":
         reducted_features = PCAReductor().fit_transform(features_values)
     elif reduc_dim_algo == "T-SNE":
-        reducted_features = TSNEReductor().fit_transform(features_values)
+        reducted_features = TSNEReductor(
+            perplexity=min(30, features_values.shape[0] - 1)
+        ).fit_transform(features_values)
     else:
         reducted_features = UMAPReductor().fit_transform(features_values)
 
