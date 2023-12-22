@@ -6,6 +6,16 @@ from numpy import abs as nabs, ndarray, arange, meshgrid, log
 
 
 def plot_time_view(data: DataFrame, serie_name: str) -> Figure:
+    """
+    Plots a time serie in the time domaine.
+
+    Args:
+        data (DataFrame): The dataframe containing the series.
+        serie_name (str): The name of the serie.
+
+    Returns:
+        Figure: The plotly figure object to be plotted.
+    """
     fig = Figure()
     fig.add_traces(
         Scatter(
@@ -29,6 +39,17 @@ def plot_time_view(data: DataFrame, serie_name: str) -> Figure:
 
 
 def plot_fft_view(frequencies: ndarray, fft_result: ndarray, serie_name: str) -> Figure:
+    """
+    Plots a time serie in the frequency domain (fast fourier transform result).
+
+    Args:
+        frequencies (ndarray): The frequencies (x axis).
+        fft_result (ndarray) : The result of the fast fourier transform (y axis).
+        serie_name (str): The name of the serie.
+
+    Returns:
+        Figure: The plotly figure object to be plotted.
+    """
     fig = Figure()
     fig.add_trace(
         Scatter(
@@ -51,7 +72,21 @@ def plot_fft_view(frequencies: ndarray, fft_result: ndarray, serie_name: str) ->
     return fig
 
 
-def plot_wavelet_view(widths, t, cwt_result: ndarray, serie_name: str) -> Figure:
+def plot_wavelet_view(
+    widths: ndarray, t: ndarray, cwt_result: ndarray, serie_name: str
+) -> Figure:
+    """
+    Plots a time serie in the wavelet domain (time/frequency mix).
+
+    Args:
+        widths (ndarray): The widths used to build the meshgrid.
+        t (ndarray): The time index used to build the meshgrid.
+        cwt_result (ndarray): The continuous wavelet transform result (z axis).
+        serie_name (str): The name of the serie.
+
+    Returns:
+        Figure: The plotly figure object to be plotted.
+    """
     T, S = meshgrid(arange(t), widths)
     fig = Figure(
         data=[
@@ -84,6 +119,16 @@ def plot_wavelet_view(widths, t, cwt_result: ndarray, serie_name: str) -> Figure
 
 
 def plot_density_view(data: DataFrame, serie_name: str) -> Figure:
+    """
+    Plots the density histogram of the serie (the serie in the probabilist domain P(y)).
+
+    Args:
+        data (DataFrame): The dataframe containing the series.
+        serie_name (str): The name of the serie.
+
+    Returns:
+        Figure: The plotly figure object to be plotted.
+    """
     group_labels = [serie_name]
 
     colors = ["orangered"]
@@ -101,6 +146,17 @@ def plot_density_view(data: DataFrame, serie_name: str) -> Figure:
 
 
 def plot_psd_view(frequencies: ndarray, psd: ndarray, serie_name: str) -> Figure:
+    """
+    Plots a time serie in the frequency domain (power spectral distribution).
+
+    Args:
+        frequencies (ndarray): The frequencies (x axis).
+        psd (ndarray) : The result of the psd computation (y axis).
+        serie_name (str): The name of the serie.
+
+    Returns:
+        Figure: The plotly figure object to be plotted.
+    """
     fig = Figure()
     fig.add_trace(
         Scatter(
@@ -124,6 +180,16 @@ def plot_psd_view(frequencies: ndarray, psd: ndarray, serie_name: str) -> Figure
 
 
 def plot_reducted_dim(reducted_df: DataFrame, reduc_dim_algo: str) -> Figure:
+    """
+    Plots a 3 dimensional scatter plot of the reducted features space of the series.
+
+    Args:
+        reducted_df (DataFrame): The 3d reducted features space of the series.
+        reduc_dim_algo (str): The reduction dimension algorithm used.
+
+    Returns:
+        Figure: The plotly object to be plotted.
+    """
     fig = scatter_3d(
         data_frame=reducted_df,
         x="fst_dim",
@@ -151,6 +217,15 @@ def plot_reducted_dim(reducted_df: DataFrame, reduc_dim_algo: str) -> Figure:
 
 
 def plot_correlation_heatmap(top_five: dict) -> Figure:
+    """
+    Plots a correlation heatmap between the features and the reducted dim axis.
+
+    Args:
+        top_five (dict): The 5 most correlated features per axis.
+
+    Returns:
+        Figure: The plotly object to be plotted.
+    """
     fig = Figure(
         data=Heatmap(
             z=[*[x for x in top_five.values()]][::-1],
