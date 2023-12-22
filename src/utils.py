@@ -137,7 +137,7 @@ def encoder(x: str, selected_datasets: list) -> str:
         "Trend",
         "Seasonal/trend",
     ]:
-        return "Base"
+        return "Added"
     else:
         return "Base"
 
