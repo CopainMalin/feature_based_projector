@@ -75,7 +75,7 @@ if dataset is not None:
         ("unique_id" in dataset.columns)
         & ("ds" in dataset.columns)
         & ("y" in dataset.columns)
-        & (period > 0)
+        & (transform)
     ):
         with c_left:
             with spinner("Features computation"):
