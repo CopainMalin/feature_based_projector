@@ -37,7 +37,7 @@ if "data_loaded" in session_state:
     with c2:
         selected_datasets = multiselect(label="Dataset(s) to focus on:", options=names)
 
-    title(":green[Feature space projection] analysis :male-detective:")
+    title(":blue[Feature space projection] analysis :male-detective:")
     # Reducted dim scatterplot
     if reduc_dim_algo == "PCA":
         reducted_features = PCAReductor().fit_transform(features_values)
@@ -59,7 +59,6 @@ if "data_loaded" in session_state:
     top_five = get_top_five_correlations(reducted_df.iloc[:, :3], features)
     fig = plot_correlation_heatmap(top_five)
     plotly_chart(figure_or_data=fig, use_container_width=True)
-
 else:
     title(
         ":warning: You must load your dataset first in the :orange[Dataset Management] page !"
