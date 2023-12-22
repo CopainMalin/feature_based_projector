@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "ts-projector"
 version = "0.1.0"
+license = "MIT"
 description = "\"A tool to visualize time series on a streamlit app with differents point of views.\""
 authors = ["CopainMalin <bgautier3800@gmail.com>"]
 readme = "README.md"
