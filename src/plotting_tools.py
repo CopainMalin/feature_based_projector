@@ -61,7 +61,7 @@ def plot_wavelet_view(widths, t, cwt_result: ndarray, serie_name: str) -> Figure
 
     fig.update_traces(
         contours_z=dict(
-            show=True, usecolormap=True, highlightcolor="chartreuse", project_z=False
+            show=True, usecolormap=True, highlightcolor="chartreuse", project_z=True
         )
     )
 
@@ -70,7 +70,7 @@ def plot_wavelet_view(widths, t, cwt_result: ndarray, serie_name: str) -> Figure
         autosize=True,
         width=1000,
         height=800,
-        # scene_camera_eye=dict(x=1.87, y=0.88, z=-0.64),
+        scene_camera_eye=dict(x=1.87, y=0.88, z=-0.64),
         margin=dict(l=65, r=50, b=65, t=90),
     )
 
